@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        *{
+            list-style:none;
+            background:skyblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap" id="wrap">
+
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/handlebars.js"></script>
+    <script type="text/x-handlebars-template" id="mycomputer">
+        {{#each this.list}}
+            <ul>
+                <li>{{name}}
+                    {{#each children}}
+                        <ol>
+                            <li>
+                                {{name}}
+                                {{#each children}}
+                                <ul>
+                                    <li>
+                                    {{name}}
+                                    {{#each children}}
+                                        <ul>
+                                            <li>{{name}}</li>
+                                        </ul>
+                                        {{/each}}
+                                    </li>
+                                </ul>
+                                {{/each}}
+                            </li>
+                        </ol>
+                    {{/each}}
+                </li>
+            </ul>
+        {{/each}}
+    </script>
+    <script>
+        $.ajax({
+            url:'/login',
+            success:function(data){
+                var data=JSON.parse(data)
+                getData(data)
+            }
+        })
+
+        function getData(data){
+            var t = $('#mycomputer').html();
+            var template = Handlebars.compile(t);
+            var html1 = template(data);
+            $('#wrap').html(html1);
+            console.log(typeof(data))
+        }
+
+        $('.wrap').on('click','li',function(){
+            $(this).children().toggle()
+        })
+    </script>
+</body>
+</html>
